@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>WhatsApp Contact</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:linear-gradient(145deg,#092e25,#0b1714);font-family:Arial,sans-serif;color:#fff;padding:20px}
+.card{width:min(100%,420px);background:#122720;border:1px solid #285344;border-radius:24px;padding:30px 24px;text-align:center;box-shadow:0 18px 60px #0005}
+.logo{margin:auto auto 14px;width:76px;height:76px;border-radius:50%;background:#25d366;display:grid;place-items:center;font-size:40px;color:#073b24}
+h1{margin:8px 0;font-size:29px}p{color:#c5d8cf;line-height:1.5}.btn{display:block;background:#25d366;color:#062d1b;text-decoration:none;font-weight:700;padding:16px 18px;border-radius:14px;margin-top:24px}.small{font-size:12px;color:#8fa99c;margin-top:20px}
+</style>
+</head>
+<body><main class="card">
+<div class="logo">☏</div><h1>WhatsApp Contact</h1>
+<p>Chat with us directly on WhatsApp.</p>
+<a class="btn" id="chat" href="#" rel="noopener">OPEN WHATSAPP</a>
+<div class="small">Direct contact • Simple • Convenient</div>
+</main>
+<script>
+fetch('/.netlify/functions/contact',{cache:'no-store'})
+.then(r=>r.json()).then(d=>{
+ if(d.number){const digits=String(d.number).replace(/\D/g,'');document.getElementById('chat').href='https://wa.me/'+digits+(d.message?'?text='+encodeURIComponent(d.message):'');}
+ else {document.getElementById('chat').textContent='WHATSAPP NOT SET UP YET';document.getElementById('chat').removeAttribute('href');}
+}).catch(()=>{document.getElementById('chat').textContent='PLEASE TRY AGAIN';});
+</script>
+</body></html>

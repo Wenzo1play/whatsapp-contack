@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WhatsApp Contact — Admin</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#edf4f0;font-family:Arial,sans-serif;padding:18px;color:#163328}.card{width:min(100%,460px);background:#fff;padding:26px;border-radius:18px;box-shadow:0 12px 40px #1232}h1{margin-top:0}label{display:block;margin:16px 0 6px;font-weight:700}input,textarea{width:100%;padding:13px;border:1px solid #b9cec3;border-radius:10px;font:inherit}button{width:100%;margin-top:18px;border:0;border-radius:10px;padding:14px;background:#128c52;color:#fff;font-weight:700;font-size:16px}small{color:#526b5f}.msg{margin-top:14px;line-height:1.5;overflow-wrap:anywhere}
+</style></head><body><main class="card">
+<h1>WhatsApp Contact Admin</h1><p>Change the destination number without changing your public website link.</p>
+<label for="password">Admin password</label><input id="password" type="password" autocomplete="current-password" placeholder="Enter Netlify environment password">
+<label for="number">WhatsApp number</label><input id="number" inputmode="tel" placeholder="e.g. 919876543210">
+<small>Include country code; do not include +, spaces, or dashes.</small>
+<label for="message">Optional pre-filled message</label><textarea id="message" rows="3" placeholder="Hello, I would like more information."></textarea>
+<button id="save">Save number</button><div id="status" class="msg" role="status"></div>
+<p><small>Keep this admin URL private. Use a strong password and never share it.</small></p>
+</main><script>
+const status=document.getElementById('status');
+document.getElementById('save').addEventListener('click',async()=>{
+ status.textContent='Saving…';
+ try{
+ const r=await fetch('/.netlify/functions/contact',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+document.getElementById('password').value},body:JSON.stringify({number:document.getElementById('number').value,message:document.getElementById('message').value})});
+ const d=await r.json();status.textContent=r.ok?'Saved successfully. Test your main website link.':(d.error||'Could not save. Check password and setup.');
+ }catch(e){status.textContent='Connection error. Check that the site has been deployed correctly.'}
+});
+</script></body></html>
